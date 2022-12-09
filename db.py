@@ -23,6 +23,11 @@ def delete_item(id):
     cursor.execute("DELETE FROM items WHERE id = ?", (id,))
     conn.commit()
 
+def update_item(id, name, file_type):
+    cursor.execute("UPDATE items SET name = ?, file_type = ? WHERE id = ?", (name, file_type, id))
+    conn.commit()
+
+
 # Function to search for an item
 def search_item(name):
     cursor.execute("SELECT * FROM items WHERE name LIKE ?", (name,))
