@@ -1,4 +1,6 @@
 import tkinter as tk
+from tkinter import filedialog
+import tkinter.ttk as ttk
 
 ####################################################################################################
 ####################################################################################################
@@ -12,7 +14,7 @@ root.resizable(width=False, height=False)  # make the window unresizeable
 
 # Set the title of the window
 root.title("File Bird v0.0.1")
-
+root.iconbitmap("img/FileBird-logo.ico")
 # Set the size of the window
 root.geometry("800x600")
 
@@ -322,12 +324,199 @@ back_button3.place(x=0, y=0)
 
 ####################################################################################################
 ####################################################################################################
+def process_text(event):
+    # Get the text that the user entered
+    text = entry.get()
+
+    # Create a Label widget
+    label = tk.Label(frame1, text=text)
+    label.place(x= 1, y = 300)
+    # Do something with the text
+    print(text)
+    return text
+
+def dir_label(text, n):
+    # Create a Label widget
+    if n== 1:
+       dir_label_.config(text=text)
+    elif n==2:
+        dir_label_2.config(text=text)
+        
+def select_folder2():
+    # Select the folder
+    folder_selected = filedialog.askdirectory()
+    entry_dir.delete(0, tk.END)
+    entry_dir.insert(0, folder_selected)
+    dir_label(folder_selected, 2)
+    
+
+def select_folder():
+    # Open a directory selector
+    folder_path = filedialog.askdirectory()
+
+    # Set the text of the Entry widget to the selected folder path
+    entry_dir.delete(0, tk.END)
+    entry_dir.insert(0, folder_path)
+
+    # Call the dir_label function, passing the folder_path as an argument
+    dir_label(folder_path, 1)
+
+def submit():
+    pass
+
+def get_clicked_checkboxes():
+    clicked_checkboxes = []
+    for i, cb in enumerate(checkbox_all):
+        if cb == 1:
+            clicked_checkboxes.append(i)
+    return clicked_checkboxes
+
+def get_clicked_output():
+    text = "these were clicked: "
+    gc = get_clicked_checkboxes()
+    for cb in gc:
+        text += str(cb) + " "
+    clicked_checkboxes_label.config(text=text)
 
 
 
+####################################################################################################
+####################################################################################################
+start_label_insert = tk.Label(content_frame1, text="Choose directory from where the files should be cleaned: ", font=("Helvetica", 8),height=1,  bg="#E6F7F8")
+start_label_insert.place(x= 2, y = 100)
+
+dir_label_ = tk.Label(content_frame1, text="No directory choosen", font=("Helvetica", 8),  bg="#E6F7F8", wraplength= 500)
+dir_label_.place(x= 120, y = 130)
+
+file_type_chose_label =  tk.Label(content_frame1, text="Choose file type you want to sort for: ", font=("Helvetica", 8),  bg="#E6F7F8")
+file_type_chose_label.place(x= 2, y = 160)
+
+location_label = tk.Label(content_frame1, text="Choose directory where the files should be sorted: ", font=("Helvetica", 8),  bg="#E6F7F8")
+location_label.place(x= 2, y = 290)
+
+dir_label_2 = tk.Label(content_frame1, text="No directory choosen", font=("Helvetica", 8),  bg="#E6F7F8", wraplength= 500)
+dir_label_2.place(x= 120, y = 320)
+
+imp_mess_label = tk.Label(content_frame1, text="Important: The files will be moved to the choosen directory, not copied", font=("Helvetica", 8),  bg="#E6F7F8")
+imp_mess_label.place(x= 2, y = 350)
+imp2_mess_label = tk.Label(content_frame1, text="Changing folder names, need to be done in the folder settings", font=("Helvetica", 8),  bg="#E6F7F8")
+imp2_mess_label.place(x= 2, y = 370)
+imp3_mess_label = tk.Label(content_frame1, text="Changing file types, need to be done in the keyword settings, that does also contain \nthe custom Checkbox, other Checkboxes cannot be changed and preset", font=("Helvetica", 8), justify="left", bg="#E6F7F8")
+imp3_mess_label.place(x= 2, y = 390)
 
 
 
+####################################################################################################
+####################################################################################################
+
+# Create an Entry widget
+entry = tk.Entry(frame1)
+entry_dir = tk.Entry(frame1, width=30)
+
+# Add the Entry widget to the root window
+entry.place(x= 1, y = 600)
+
+entry.bind("<Return>", process_text)
+
+####################################################################################################
+####################################################################################################
+
+# Create a Button widget
+button = tk.Button(frame1, text="Select Folder", command=select_folder)
+
+# Add the Entry and Button widgets to the root window
+button.place(x= 10, y = 130, width=100, height=20)
+
+button2 = tk.Button(frame1, text="Select Folder", command=select_folder2)
+
+button2.place(x= 10, y = 320, width=100, height=20)
+
+submit = tk.Button(frame1, text="Submit", command=submit, bg="green", fg="white")
+
+submit.place(x= 120, y = 450, width=200, height=50)
+#####################################################################################################
+#####################################################################################################
+
+checkbox_all = []
+checkbox_vars = []
+for i in range(10):
+    var = tk.StringVar(value=0)
+    checkbox_vars.append(var)
+
+
+# Create the radio buttons
+check_button1 = tk.Checkbutton(frame1, text="All", variable = checkbox_vars[0], onvalue="All", offvalue="0")
+check_button2 = tk.Checkbutton(frame1, text="Documents", variable = checkbox_vars[1], onvalue="Doc", offvalue="0")
+check_button3 = tk.Checkbutton(frame1, text="Pictures", variable = checkbox_vars[2], onvalue="Pic", offvalue="0")
+check_button4 = tk.Checkbutton(frame1, text="Code", variable = checkbox_vars[3], onvalue="Cod", offvalue="0")
+check_button5 = tk.Checkbutton(frame1, text="Application", variable = checkbox_vars[4], onvalue="App", offvalue="0")
+check_button6 = tk.Checkbutton(frame1, text="Audio", variable = checkbox_vars[5], onvalue="Aud", offvalue="0")
+check_button7 = tk.Checkbutton(frame1, text="web", variable = checkbox_vars[6], onvalue="web", offvalue="0")
+check_button8 = tk.Checkbutton(frame1, text="zip", variable = checkbox_vars[7], onvalue="zip", offvalue="0")
+check_button9 = tk.Checkbutton(frame1, text="Video", variable = checkbox_vars[8], onvalue="vid", offvalue="0")
+check_button10 = tk.Checkbutton(frame1, text="Custom", variable = checkbox_vars[9], onvalue="cus", offvalue="0")
+
+
+check_button1.deselect()
+check_button2.deselect()
+check_button3.deselect()
+check_button4.deselect()
+check_button5.deselect()
+check_button6.deselect()
+check_button7.deselect()
+check_button8.deselect()
+check_button9.deselect()
+check_button10.deselect()
+
+
+# Place the radio buttons and labels on the screen
+check_button1.place(x=10, y=200)
+#label1.place(x=140, y=200)
+check_button2.place(x=60, y=200)
+#label2.place(x=140, y=230)
+check_button3.place(x=160, y=200)
+check_button4.place(x=240, y=200)
+check_button5.place(x=10, y=250)
+check_button6.place(x=310, y=200)
+check_button7.place(x=110, y=250)
+check_button8.place(x=170, y=250)
+check_button9.place(x=225, y=250)
+check_button10.place(x=300, y=250)
+
+
+
+checkbox_all.append(check_button1)
+checkbox_all.append(check_button2)
+checkbox_all.append(check_button3)
+checkbox_all.append(check_button4)
+checkbox_all.append(check_button5)
+checkbox_all.append(check_button6)
+checkbox_all.append(check_button7)
+checkbox_all.append(check_button8)
+checkbox_all.append(check_button9)
+checkbox_all.append(check_button10)
+
+
+####################################################################################################
+####################################################################################################
+
+def show():
+    #myLabel = tk.Label(frame1, text = checkbox_vars[0].get()).pack()
+    txt = ""
+    for i in range(len(checkbox_vars)):
+        if checkbox_vars[i].get() != "0":
+            txt += checkbox_vars[i].get()
+            # print("Checkbox " + str(i) + " is checked")
+    clicked_checkboxes_label.config(text = txt)
+#label for checking which checkboxes where clicked
+clicked_checkboxes_label = tk.Label(content_frame1, text="No checkboxes clicked", font=("Helvetica", 8),  bg="#E6F7F8")
+clicked_checkboxes_label.place(x= 2, y = 450)
+
+
+#myButton = tk.Button(frame1, text = "Click Me!", command = show).pack()
+
+####################################################################################################
+####################################################################################################
 
 
 # Start the event loop
