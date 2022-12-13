@@ -1,0 +1,12 @@
+'file_type': 'file_name'
+'.png': 'image_files',
+'.jpg': 'image_files',
+'.jpeg': 'image_files',
+'.gif': 'image_files',
+'.bmp': 'image_files',
+'.svg': 'image_files',
+'.psd': 'image_files',
+'.ai': 'image_files',
+'.indd': 'image_files',
+'.PNG': 'image_files',
+'.ico': 'ico_files',

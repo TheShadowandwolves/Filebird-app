@@ -1,8 +1,9 @@
 import tkinter as tk
 from tkinter import filedialog
 import tkinter.ttk as ttk
-
+import mov as mov
 ####################################################################################################
+#           window
 ####################################################################################################
 
 # Create the main window
@@ -10,6 +11,7 @@ root = tk.Tk()
 root.resizable(width=False, height=False)  # make the window unresizeable
 
 ####################################################################################################
+#          set up window
 ####################################################################################################
 
 # Set the title of the window
@@ -19,6 +21,7 @@ root.iconbitmap("img/FileBird-logo.ico")
 root.geometry("800x600")
 
 ####################################################################################################
+#           menu
 ####################################################################################################
 
 # Create a menu with some items
@@ -44,6 +47,17 @@ menu.add_command(label="Quit", command=root.quit)
 root.config(menu=menu)
 
 ####################################################################################################
+#           variables
+####################################################################################################
+
+checkbox_all = []
+checkbox_vars = []
+for i in range(10):
+    var = tk.StringVar(value=0)
+    checkbox_vars.append(var)
+
+####################################################################################################
+#       side menu frame
 ####################################################################################################
 
 # create a frame for the side menu
@@ -51,6 +65,7 @@ menu_frame = tk.Frame(root, width=200, height=600, bg="#FA8E36")
 menu_frame.pack(side="left", fill="y")
 
 ####################################################################################################
+#       all frames
 ####################################################################################################
 
 # create a frame for the content
@@ -74,6 +89,7 @@ social_media_frame.pack(side="right", fill="y")
 
 
 ####################################################################################################
+#       logo
 ####################################################################################################
 
 
@@ -82,6 +98,7 @@ logo_frame = tk.Frame(menu_frame, width=200, height=50, bg="#E6F7F8")
 logo_frame.pack(side="top")
 
 ####################################################################################################
+#       logo
 ####################################################################################################
 
 # add the logo to the logo frame (replace with your own logo)
@@ -93,6 +110,7 @@ logo_label = tk.Label(logo_frame, image=logo, width=logo_width, height=logo_heig
 logo_label.pack()
 
 ####################################################################################################
+#       functions
 ####################################################################################################
 
 def change_to_frame0(event=None):
@@ -160,12 +178,14 @@ def change_to_social_media(event=None):
 
 
 ####################################################################################################
+#       main frame
 ####################################################################################################
 
 #raise frame0
 change_to_frame0()
 
 ####################################################################################################
+#       buttons side menu
 ####################################################################################################
 
 # create the buttons for the side menu
@@ -188,6 +208,7 @@ social_media_button = tk.Button(menu_frame, text="Social Media", width=40, heigh
 social_media_button.pack(pady=2.5,padx=0)
 
 ####################################################################################################
+#       content frames
 ####################################################################################################
 
 # create a frame for the main content
@@ -217,6 +238,7 @@ content_frame_social_media.pack(side="right", fill="both", expand=True)
 
 
 #####################################################################################################
+#       title frame
 #####################################################################################################
 #create a frame for the title of the main content
 title_frame = tk.Frame(content_frame, width=800, height=50,  bg="#E6F7F8")
@@ -248,6 +270,7 @@ social_media_frame.pack(side="top", fill="x")
 
 
 #####################################################################################################
+#       title
 #####################################################################################################
 
 # add the title to the title frame
@@ -280,6 +303,7 @@ social_media_title.pack(padx=20, pady=20)
 
 
 #####################################################################################################
+#       button frame
 #####################################################################################################
 
 # # label for the start button
@@ -295,6 +319,7 @@ social_media_title.pack(padx=20, pady=20)
 # settings_button_label.pack(side="left", padx=20, pady=20)
 
 #####################################################################################################
+#       intro text
 #####################################################################################################
 
 #"Introducing FileBird - the revolutionary file organization tool that makes it easy to sort and manage your files. With FileBird, you can effortlessly organize your files into custom folders based on file type and name, so you can quickly find what you need when you need it. Say goodbye to cluttered and disorganized folders, and say hello to a new level of file organization and productivity with FileBird."
@@ -305,6 +330,7 @@ main_label.pack(padx=20, pady=20)
 
 
 ####################################################################################################
+#       return to main
 ####################################################################################################
 def return_to_main():
     change_to_frame0()
@@ -323,17 +349,18 @@ back_button3.place(x=0, y=0)
 
 
 ####################################################################################################
+#       functions
 ####################################################################################################
-def process_text(event):
-    # Get the text that the user entered
-    text = entry.get()
+# def process_text(event):
+#     # Get the text that the user entered
+#     text = entry.get()
 
-    # Create a Label widget
-    label = tk.Label(frame1, text=text)
-    label.place(x= 1, y = 300)
-    # Do something with the text
-    print(text)
-    return text
+#     # Create a Label widget
+#     label = tk.Label(frame1, text=text)
+#     label.place(x= 1, y = 300)
+#     # Do something with the text
+#     print(text)
+#     return text
 
 def dir_label(text, n):
     # Create a Label widget
@@ -345,8 +372,8 @@ def dir_label(text, n):
 def select_folder2():
     # Select the folder
     folder_selected = filedialog.askdirectory()
-    entry_dir.delete(0, tk.END)
-    entry_dir.insert(0, folder_selected)
+    entry_dir2.delete(0, tk.END)
+    entry_dir2.insert(0, folder_selected)
     dir_label(folder_selected, 2)
     
 
@@ -362,7 +389,21 @@ def select_folder():
     dir_label(folder_path, 1)
 
 def submit():
-    pass
+    # Get the text that the user entered
+    origin = entry_dir.get()
+    print(origin)
+    destination = entry_dir2.get()
+    chose = get_clicked_checkboxes()
+    suc = mov.run(origin, destination, chose)
+    if suc == "success":
+        success_label.config(text="Success!", bg="green", fg="white")
+    elif suc == "Error: NO CHOICE WAS MADE":
+        #"Error: NO CHOICE WAS MADE"
+        success_label.config(text="Error: NO CHOICE WAS MADE", bg="red", fg="white")
+    elif suc == "Error: Path does not exist":
+        #"Error: Path does not exist"
+        success_label.config(text="Error: Path does not exist", bg="red", fg="white")
+
 
 def get_clicked_checkboxes():
     clicked_checkboxes = []
@@ -371,16 +412,17 @@ def get_clicked_checkboxes():
             clicked_checkboxes.append(i)
     return clicked_checkboxes
 
-def get_clicked_output():
-    text = "these were clicked: "
-    gc = get_clicked_checkboxes()
-    for cb in gc:
-        text += str(cb) + " "
-    clicked_checkboxes_label.config(text=text)
+# def get_clicked_output():
+#     text = "these were clicked: "
+#     gc = get_clicked_checkboxes()
+#     for cb in gc:
+#         text += str(cb) + " "
+#     clicked_checkboxes_label.config(text=text)
 
 
 
 ####################################################################################################
+#       content frame 1
 ####################################################################################################
 start_label_insert = tk.Label(content_frame1, text="Choose directory from where the files should be cleaned: ", font=("Helvetica", 8),height=1,  bg="#E6F7F8")
 start_label_insert.place(x= 2, y = 100)
@@ -404,21 +446,25 @@ imp2_mess_label.place(x= 2, y = 370)
 imp3_mess_label = tk.Label(content_frame1, text="Changing file types, need to be done in the keyword settings, that does also contain \nthe custom Checkbox, other Checkboxes cannot be changed and preset", font=("Helvetica", 8), justify="left", bg="#E6F7F8")
 imp3_mess_label.place(x= 2, y = 390)
 
-
+success_label = tk.Label(content_frame1, text="", font=("Helvetica", 8),  bg="#E6F7F8")
+success_label.place(x= 2, y = 500)
 
 ####################################################################################################
+#       input dir  
 ####################################################################################################
 
 # Create an Entry widget
-entry = tk.Entry(frame1)
+#entry = tk.Entry(frame1)
 entry_dir = tk.Entry(frame1, width=30)
+entry_dir2 = tk.Entry(frame1, width=30)
 
 # Add the Entry widget to the root window
-entry.place(x= 1, y = 600)
+#entry.place(x= 1, y = 600)
 
-entry.bind("<Return>", process_text)
+#entry.bind("<Return>", process_text)
 
 ####################################################################################################
+#       output dir
 ####################################################################################################
 
 # Create a Button widget
@@ -431,17 +477,13 @@ button2 = tk.Button(frame1, text="Select Folder", command=select_folder2)
 
 button2.place(x= 10, y = 320, width=100, height=20)
 
-submit = tk.Button(frame1, text="Submit", command=submit, bg="green", fg="white")
+submits = tk.Button(frame1, text="Submit",  bg="green", fg="white", command=submit)
 
-submit.place(x= 120, y = 450, width=200, height=50)
+submits.place(x= 120, y = 450, width=200, height=50)
 #####################################################################################################
+#       checkbox
 #####################################################################################################
 
-checkbox_all = []
-checkbox_vars = []
-for i in range(10):
-    var = tk.StringVar(value=0)
-    checkbox_vars.append(var)
 
 
 # Create the radio buttons
@@ -498,24 +540,26 @@ checkbox_all.append(check_button10)
 
 
 ####################################################################################################
+#       checkbox checkup
 ####################################################################################################
 
-def show():
-    #myLabel = tk.Label(frame1, text = checkbox_vars[0].get()).pack()
-    txt = ""
-    for i in range(len(checkbox_vars)):
-        if checkbox_vars[i].get() != "0":
-            txt += checkbox_vars[i].get()
-            # print("Checkbox " + str(i) + " is checked")
-    clicked_checkboxes_label.config(text = txt)
-#label for checking which checkboxes where clicked
-clicked_checkboxes_label = tk.Label(content_frame1, text="No checkboxes clicked", font=("Helvetica", 8),  bg="#E6F7F8")
-clicked_checkboxes_label.place(x= 2, y = 450)
+# def show():
+#     #myLabel = tk.Label(frame1, text = checkbox_vars[0].get()).pack()
+#     txt = ""
+#     for i in range(len(checkbox_vars)):
+#         if checkbox_vars[i].get() != "0":
+#             txt += checkbox_vars[i].get()
+#             # print("Checkbox " + str(i) + " is checked")
+#     clicked_checkboxes_label.config(text = txt)
+# #label for checking which checkboxes where clicked
+# clicked_checkboxes_label = tk.Label(content_frame1, text="No checkboxes clicked", font=("Helvetica", 8),  bg="#E6F7F8")
+# clicked_checkboxes_label.place(x= 2, y = 450)
 
 
 #myButton = tk.Button(frame1, text = "Click Me!", command = show).pack()
 
 ####################################################################################################
+#       end
 ####################################################################################################
 
 
