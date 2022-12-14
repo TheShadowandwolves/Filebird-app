@@ -1,43 +1,52 @@
-import csv
+import mov as mov
 
-# Open the file in write mode
-with open("file.txt", "w") as f:
-    # Write some text to the file
-    f.write("Hello, world!")
+def search_in_file(keys):
+    file_types = {}
+    with open(f"file_types/types_Cus.txt", "r") as file:
+            for line in file:
+                (key, val) = line.split()
+                file_types[key] = val
+            for i in file_types:
+                if i == keys:
+                    return True
+            return False
 
-# Open the file in append mode
-with open("file.txt", "a") as f:
-    # Append more text to the file
-    f.write("\nThis is a new line.")
+def get_file():
+    file_types = {}
+    with open(f"file_types/types_Cus.txt", "r") as file:
+            for line in file:
+                (key, val) = line.split()
+                file_types[key] = val
+            return file_types
+               
+           
 
-# Open the file in read mode
-with open("file.txt", "r") as f:
-    # Read the contents of the file
-    print(f.read())  # Should print "Hello, world!\nThis is a new line."
+def add_to_file(key, value):
+    with open(f"file_types/types_Cus.txt", "a") as file:
+        if search_in_file(key):
+            return "Error: File type already exists"
+        else:   
+            content = ""
+            content += f" \n{key} {value}"
+            print(content)
+            #write in file on the next line
+            file.write(content)
+            return "File type added"
 
-
-dic = {}
-with open('hw5q7.txt') as csv_file:
-    csv_reader = csv.reader(csv_file, delimiter= ",")
-    line_count = 0
-    for row in csv_reader:
-        if line_count == 0:
-            #print(f'Column names are {", ".join(row)}')
-            line_count += 1
+def change_in_file(key, value):
+    with open(f"file_types/types_Cus.txt", "r") as file:
+        content = get_file()
+        if key in content.keys():
+            content[key] = value
+            return "File type changed"
         else:
-            #print(row)
-            rows = []
-            row[0].replace("\\", " ")
-            rows = row[0].split()
-            #print(rows)
-            total_cost = int(rows[2]) * int(rows[3])
-            print(f'\t Customer number {rows[0]} purchased {rows[3]} {rows[1]} for  {rows[2]} each, giving a total cost of ${total_cost} dollars.')
-            try:
-                if dic[rows[0]]:
-                    dic[rows[0]] += total_cost
-            except:
-                dic[rows[0]] = total_cost    
-            line_count += 1
-    #print(f'Processed {line_count} lines.')
-for i in dic:
-    print(f'\t Customer number {i} had a total bill of ${dic[i]}')
+            return "Error: File type does not exist"
+
+def delete_from_file(key, value):
+    with open(f"file_types/types_Cus.txt", "r") as file:
+        content = get_file()
+        if key in content.keys():
+            del content[key]
+            return "File type deleted"
+        else:
+            return "Error: File type does not exist"

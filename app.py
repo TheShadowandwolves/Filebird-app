@@ -1,8 +1,9 @@
 import tkinter as tk
 from tkinter import filedialog
-import tkinter.ttk as ttk
+from tkinter import ttk as ttk
 import mov as mov
-import time
+from tkinter.ttk import Treeview as tv
+import database as db
 ####################################################################################################
 #           window
 ####################################################################################################
@@ -56,6 +57,9 @@ checkbox_vars = []
 for i in range(10):
     var = tk.StringVar(value=0)
     checkbox_vars.append(var)
+
+var_file = []
+check_file = []
 
 ####################################################################################################
 #       side menu frame
@@ -236,6 +240,7 @@ content_frame_donate.pack(side="right", fill="both", expand=True)
 
 content_frame_social_media = tk.Frame(social_media_frame, width=800, height=500, bg="#B0C4DE")
 content_frame_social_media.pack(side="right", fill="both", expand=True)
+
 
 
 #####################################################################################################
@@ -564,6 +569,145 @@ clicked_checkboxes_label.place(x= 2, y = 450)
 
 
 myButton = tk.Button(frame1, text = "Click Me!", command = show).place(x=10, y=470)
+
+####################################################################################################
+#      treeview functions
+####################################################################################################
+def delete_item(event):
+    for selected_item in tree.selection():
+        values = tree.item(selected_item)['values']
+        type = values[0]
+        print(type)
+        folder = values[1]
+        print(folder)
+        tree.delete(selected_item)
+        delt = db.delete_from_file(type, folder)
+        print(delt)
+        if delt == "Error: File type does not exist":
+            pass
+        else:
+            pass
+
+
+
+
+def insert_item(event):
+    sel = []
+    def klick_top(self):
+        for j,i in enumerate(trie.selection()):
+            sel.append(trie.item(i)['values'])
+            db.add_to_file(sel[j][0], sel[j][1])
+            print(f'sel {sel}')
+        #close window
+        #window.destroy()
+        #enable main window
+        #frame2.grab_release()
+    
+    window = tk.Toplevel(frame2, width=300, height=400)
+    window.resizable(False, False)
+
+    window.title("Insert")
+    window.configure(bg="#E6F7F8")
+    #disable minimize and maximize button
+    window.attributes("-toolwindow", 1)
+    #if window is open disable main window
+    window.grab_set()
+    window.focus_set()
+    window.transient(frame2)
+    trie = ttk.Treeview(window, columns=('file_type', 'folder_name'), show='headings')
+    trie.heading('file_type', text='File Type')
+    trie.heading('folder_name', text='Folder Name')
+    trie.column('file_type', width=100)
+    trie.column('folder_name', width=100)
+    trie.place(x=10, y=10)
+    
+   
+    #insert data into treeview
+    with open(f"file_types/types_All.txt", "r") as file:     
+        for line in file:
+            (key, val) = line.split()
+            trie.insert('', 'end', values=(key, val))
+        
+        
+        
+        frame2.grab_release()
+        print(sel)
+def activate_item(event):
+    pass
+
+
+def klick(event):
+    selected_item = tree.selection()
+    values = tree.item(selected_item)['values']
+    #print(values)
+
+
+    
+
+####################################################################################################
+#       treeview
+####################################################################################################
+
+tree = ttk.Treeview(frame2, columns=('file_type', 'folder_name', 'activation'), show='headings')
+
+# Set the column headers
+tree.heading('file_type', text='File Type')
+tree.heading('folder_name', text='Folder Name')
+tree.heading('activation', text='Activation')
+
+# Set the column widths
+tree.column('file_type', width=50)
+tree.column('folder_name', width=50)
+tree.column('activation', width=50)
+
+# Hide the column with row numbers
+#tree.column('#0', width=0, stretch='no')
+
+
+with open(f"file_types/types_Cus.txt", "r") as file:     
+    for i,line in enumerate(file):
+        (key, val) = line.split()
+        vals = tk.StringVar(value=0)
+        check_file.append(vals.get())
+        ch = tk.Checkbutton(tree, text="h", onvalue="1", offvalue="0")
+        ch.deselect()
+        check_file.append(ch)
+        tree.insert('', 'end', values=(key, val, vals.get()))
+        
+        
+        
+
+tree.bind('<<TreeviewSelect>>', klick)
+
+selected_item = tree.selection()
+values = tree.item(selected_item)['values']
+remove_button = tk.Button(frame2, text="Remove", command= lambda: delete_item(selected_item))
+remove_button.place(x=10, y=500)
+insert_button = tk.Button(frame2, text="New", command= lambda: insert_item(selected_item))
+insert_button.place(x=65, y=500)
+activate_button = tk.Button(frame2, text="Activate", command= lambda: activate_item(selected_item))
+activate_button.place(x=105, y=500)
+
+insert_btt = tk.Button(window, text="Insert", command=trie.bind('<<TreeviewSelect>>', klick_top))
+insert_btt.place(x=10, y=350)
+
+# Add multiple rows to the Treeview
+# tree.insert('', 'end', values=('image', 'folder1', ''))
+# tree.insert('', 'end', values=('video', 'folder2', 'False'))
+# tree.insert('', 'end', values=('audio', 'folder3', 'True'))
+
+
+#tree.add_widget(checkbox, 1, 2)
+
+# Display the Treeview
+tree.place(x=10, y=200, width=300, height=300)
+
+
+# add a scrollbar
+scrollbar = ttk.Scrollbar(frame2, orient=tk.VERTICAL, command=tree.yview)
+tree.configure(yscroll=scrollbar.set)
+scrollbar.place(x=310, y=200, width=20, height=300)
+
 
 ####################################################################################################
 #       end
