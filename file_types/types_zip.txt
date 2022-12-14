@@ -1,0 +1,2 @@
+.zip zip_files
+.7z 7z_files

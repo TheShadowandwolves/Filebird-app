@@ -6,11 +6,18 @@ def get_file_types(chose):
     # insert from the types_<chose>.txt file the file types
     file_types = {}
     for i in chose:
-        with open(f"types_{i}.txt", "r") as file:
-            for line in file:
-                (key, val) = line.split()
-                file_types[key] = val
-    print(file_types)
+        if i == "All":
+            with open(f"file_types/types_All.txt", "r") as file:
+                for line in file:
+                    (key, val) = line.split()
+                    file_types[key] = val
+                return file_types
+        else:
+            with open(f"file_types/types_{i}.txt", "r") as file:
+                for line in file:
+                    (key, val) = line.split()
+                    file_types[key] = val
+    #print(file_types)
     return file_types
 
 
@@ -53,4 +60,9 @@ def run(origin, destination, chose):
                     os.makedirs(dest_dir)
 
                 # Move the file to the destination folder
-                shutil.move(os.path.join(dest_path, filename), dest_dir)
+                try:
+                    shutil.move(os.path.join(dest_path, filename), dest_dir)
+                except:
+                    #return "Error: File already exists"
+                    pass
+        return "success"

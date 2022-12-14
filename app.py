@@ -2,6 +2,7 @@ import tkinter as tk
 from tkinter import filedialog
 import tkinter.ttk as ttk
 import mov as mov
+import time
 ####################################################################################################
 #           window
 ####################################################################################################
@@ -396,20 +397,26 @@ def submit():
     chose = get_clicked_checkboxes()
     suc = mov.run(origin, destination, chose)
     if suc == "success":
+        success_label.config(text="", bg="#E6F7F8", fg="black")
         success_label.config(text="Success!", bg="green", fg="white")
     elif suc == "Error: NO CHOICE WAS MADE":
         #"Error: NO CHOICE WAS MADE"
+        success_label.config(text="", bg="#E6F7F8", fg="black")
         success_label.config(text="Error: NO CHOICE WAS MADE", bg="red", fg="white")
     elif suc == "Error: Path does not exist":
         #"Error: Path does not exist"
+        success_label.config(text="", bg="#E6F7F8", fg="black")
         success_label.config(text="Error: Path does not exist", bg="red", fg="white")
-
+        
+        
 
 def get_clicked_checkboxes():
     clicked_checkboxes = []
-    for i, cb in enumerate(checkbox_all):
-        if cb == 1:
-            clicked_checkboxes.append(i)
+    for i in range(len(checkbox_vars)):
+        ck = checkbox_vars[i].get()
+        if ck != "0":
+            clicked_checkboxes.append(ck)
+            # print("Checkbox " + str(i) + " is checked")
     return clicked_checkboxes
 
 # def get_clicked_output():
@@ -543,20 +550,20 @@ checkbox_all.append(check_button10)
 #       checkbox checkup
 ####################################################################################################
 
-# def show():
-#     #myLabel = tk.Label(frame1, text = checkbox_vars[0].get()).pack()
-#     txt = ""
-#     for i in range(len(checkbox_vars)):
-#         if checkbox_vars[i].get() != "0":
-#             txt += checkbox_vars[i].get()
-#             # print("Checkbox " + str(i) + " is checked")
-#     clicked_checkboxes_label.config(text = txt)
-# #label for checking which checkboxes where clicked
-# clicked_checkboxes_label = tk.Label(content_frame1, text="No checkboxes clicked", font=("Helvetica", 8),  bg="#E6F7F8")
-# clicked_checkboxes_label.place(x= 2, y = 450)
+def show():
+    #myLabel = tk.Label(frame1, text = checkbox_vars[0].get()).pack()
+    txt = ""
+    for i in range(len(checkbox_vars)):
+        if checkbox_vars[i].get() != "0":
+            txt += checkbox_vars[i].get() + " "
+            # print("Checkbox " + str(i) + " is checked")
+    clicked_checkboxes_label.config(text = txt)
+#label for checking which checkboxes where clicked
+clicked_checkboxes_label = tk.Label(content_frame1, text="No checkboxes clicked", font=("Helvetica", 8),  bg="#E6F7F8")
+clicked_checkboxes_label.place(x= 2, y = 450)
 
 
-#myButton = tk.Button(frame1, text = "Click Me!", command = show).pack()
+myButton = tk.Button(frame1, text = "Click Me!", command = show).place(x=10, y=470)
 
 ####################################################################################################
 #       end
