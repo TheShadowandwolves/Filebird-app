@@ -688,8 +688,8 @@ insert_button.place(x=65, y=500)
 activate_button = tk.Button(frame2, text="Activate", command= lambda: activate_item(selected_item))
 activate_button.place(x=105, y=500)
 
-insert_btt = tk.Button(window, text="Insert", command=trie.bind('<<TreeviewSelect>>', klick_top))
-insert_btt.place(x=10, y=350)
+# insert_btt = tk.Button(window, text="Insert", command=trie.bind('<<TreeviewSelect>>', klick_top))
+# insert_btt.place(x=10, y=350)
 
 # Add multiple rows to the Treeview
 # tree.insert('', 'end', values=('image', 'folder1', ''))
