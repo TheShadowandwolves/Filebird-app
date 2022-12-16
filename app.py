@@ -573,67 +573,48 @@ myButton = tk.Button(frame1, text = "Click Me!", command = show).place(x=10, y=4
 ####################################################################################################
 #      treeview functions
 ####################################################################################################
+
 def delete_item(event):
-    for selected_item in tree.selection():
-        values = tree.item(selected_item)['values']
-        type = values[0]
-        print(type)
-        folder = values[1]
-        print(folder)
-        tree.delete(selected_item)
-        delt = db.delete_from_file(type, folder)
-        print(delt)
-        if delt == "Error: File type does not exist":
-            pass
+    pass
+def insert_item(event):
+    pass
+def activate_item(event):
+    f = ""
+   
+    print("Enter active")
+    sel = tree.selection()
+    for i in sel:
+        print("Enter for")
+        if tree.item(i)['values'][2] == 0:
+            print("Enter if")
+            tree.item(i, values=(tree.item(i)['values'][0], tree.item(i)['values'][1], 1))
+            with open(f'file_types/types_Cus.txt', 'r') as file:
+                r = file.read()
+                print(r)
+            with open(f"file_types/types_Cus.txt", "w") as file:  
+                f += r
+                f += f'{tree.item(i)["values"][0]} {tree.item(i)["values"][1]} \n'
+                file.write(f)
+                print(f)
+        #save all values that are True
         else:
             pass
 
-
-
-
-def insert_item(event):
-    sel = []
-    def klick_top(self):
-        for j,i in enumerate(trie.selection()):
-            sel.append(trie.item(i)['values'])
-            db.add_to_file(sel[j][0], sel[j][1])
-            print(f'sel {sel}')
-        #close window
-        #window.destroy()
-        #enable main window
-        #frame2.grab_release()
+def deactivate_item(event):
+    print("Enter deactive")
+    sel = tree.selection()
+    for i in sel:
+        if tree.item(i)['values'][2] == 1:
+            print("Enter if")
+            tree.item(i, values=(tree.item(i)['values'][0], tree.item(i)['values'][1], 0))
+            with open(f"file_types/types_Cus.txt", "r") as file:  
+                #delete the value in cus.txt
+                f = file.read()
+            with open(f"file_types/types_Cus.txt", "w") as file:  
+                file.write(f.replace(f'{tree.item(i)["values"][0]} {tree.item(i)["values"][1]} \n', ''))
     
-    window = tk.Toplevel(frame2, width=300, height=400)
-    window.resizable(False, False)
-
-    window.title("Insert")
-    window.configure(bg="#E6F7F8")
-    #disable minimize and maximize button
-    window.attributes("-toolwindow", 1)
-    #if window is open disable main window
-    window.grab_set()
-    window.focus_set()
-    window.transient(frame2)
-    trie = ttk.Treeview(window, columns=('file_type', 'folder_name'), show='headings')
-    trie.heading('file_type', text='File Type')
-    trie.heading('folder_name', text='Folder Name')
-    trie.column('file_type', width=100)
-    trie.column('folder_name', width=100)
-    trie.place(x=10, y=10)
-    
-   
-    #insert data into treeview
-    with open(f"file_types/types_All.txt", "r") as file:     
-        for line in file:
-            (key, val) = line.split()
-            trie.insert('', 'end', values=(key, val))
+       
         
-        
-        
-        frame2.grab_release()
-        print(sel)
-def activate_item(event):
-    pass
 
 
 def klick(event):
@@ -663,30 +644,42 @@ tree.column('activation', width=50)
 # Hide the column with row numbers
 #tree.column('#0', width=0, stretch='no')
 
+def check_fileAB(keya,keyb):
+    if keya == keyb:
+        return True
+    else:
+        return False
+    
 
-with open(f"file_types/types_Cus.txt", "r") as file:     
-    for i,line in enumerate(file):
-        (key, val) = line.split()
-        vals = tk.StringVar(value=0)
-        check_file.append(vals.get())
-        ch = tk.Checkbutton(tree, text="h", onvalue="1", offvalue="0")
-        ch.deselect()
+with open(f"file_types/types_All.txt", "r") as file:  
+    for line in file:
+        (keya, vala) = line.split()
+        ch = 0
         check_file.append(ch)
-        tree.insert('', 'end', values=(key, val, vals.get()))
+        tree.insert('', 'end', values=(keya, vala, ch))
         
-        
+with open(f"file_types/types_Cus.txt", "r") as file:    
+    for line in file:
+        (keyb, valb) = line.split()
+        for i in range(len(check_file)):
+            if check_fileAB(keya,keyb) == False:
+                check_file[i] = 1
+        print(check_file[i])
+
         
 
 tree.bind('<<TreeviewSelect>>', klick)
 
 selected_item = tree.selection()
 values = tree.item(selected_item)['values']
-remove_button = tk.Button(frame2, text="Remove", command= lambda: delete_item(selected_item))
-remove_button.place(x=10, y=500)
-insert_button = tk.Button(frame2, text="New", command= lambda: insert_item(selected_item))
-insert_button.place(x=65, y=500)
+insert_button = tk.Button(frame2, text="+", command= lambda: insert_item(selected_item), width=2)
+insert_button.place(x=11, y=500)
+delete_button = tk.Button(frame2, text="-", command= lambda: delete_item(selected_item), width=2)
+delete_button.place(x=36, y=500)
 activate_button = tk.Button(frame2, text="Activate", command= lambda: activate_item(selected_item))
-activate_button.place(x=105, y=500)
+activate_button.place(x=61, y=500)
+deactive_button = tk.Button(frame2, text="Deactivate", command= lambda: deactivate_item(selected_item))
+deactive_button.place(x=116, y=500)
 
 # insert_btt = tk.Button(window, text="Insert", command=trie.bind('<<TreeviewSelect>>', klick_top))
 # insert_btt.place(x=10, y=350)

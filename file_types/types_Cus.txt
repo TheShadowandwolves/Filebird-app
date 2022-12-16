@@ -1,4 +1,2 @@
-.zip zip_files 
-.mp3 audio_files 
-.iso iso_files 
-.jpg image_files
+.exe exe_files 
+.png image_files 
