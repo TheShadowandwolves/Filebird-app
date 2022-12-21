@@ -1,2 +1,8 @@
 .exe exe_files 
-.png image_files 
+.iso iso_files 
+.mp4 video_files 
+.jpg image_files 
+.gif image_files 
+.xhtml xhtml_files 
+.cpp cpp_file 
+.hpp hpp_files 
